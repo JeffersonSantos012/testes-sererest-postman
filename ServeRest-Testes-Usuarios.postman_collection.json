@@ -1,0 +1,241 @@
+{
+  "info": {
+    "name": "ServeRest - Testes de Usu\u00e1rios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET - Listar usu\u00e1rios",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Deve conter a lista de usu\u00e1rios\", () => {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData.quantidade).to.be.greaterThan(0);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - Criar usu\u00e1rio com sucesso",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nome\": \"Jo\\u00e3o QA\",\n    \"email\": \"joaoqa123@email.com\",\n    \"password\": \"teste123\",\n    \"administrador\": \"true\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 201\", () => {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Cadastro com sucesso\", () => {",
+              "    pm.expect(pm.response.json().message).to.include(\"Cadastro realizado com sucesso\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - Criar usu\u00e1rio com email duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nome\": \"Jo\\u00e3o QA\",\n    \"email\": \"joaoqa123@email.com\",\n    \"password\": \"teste123\",\n    \"administrador\": \"true\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 400\", () => {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Erro de e-mail duplicado\", () => {",
+              "    pm.expect(pm.response.json().message).to.include(\"Este email j\u00e1 est\u00e1 sendo usado\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT - Atualizar usu\u00e1rio (editar o ID antes)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nome\": \"Jo\\u00e3o QA Editado\",\n    \"email\": \"joaoeditado@email.com\",\n    \"password\": \"teste123\",\n    \"administrador\": \"false\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/usuarios/{{id_usuario}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Usu\u00e1rio atualizado\", () => {",
+              "    pm.expect(pm.response.json().message).to.include(\"Registro alterado com sucesso\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE - Excluir usu\u00e1rio (editar o ID antes)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/usuarios/{{id_usuario}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Usu\u00e1rio exclu\u00eddo com sucesso\", () => {",
+              "    pm.expect(pm.response.json().message).to.include(\"Registro exclu\u00eddo com sucesso\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE - Tentar excluir usu\u00e1rio inexistente",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:3000/usuarios/abc1234567890",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "usuarios",
+            "abc1234567890"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", () => {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Erro ao excluir usu\u00e1rio inexistente\", () => {",
+              "    pm.expect(pm.response.json().message).to.include(\"Nenhum registro exclu\u00eddo\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
